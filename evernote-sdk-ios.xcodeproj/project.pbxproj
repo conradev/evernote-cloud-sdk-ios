@@ -1890,6 +1890,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../WorkflowKit/WorkflowKit/\"";
 			};
 			name = Debug;
 		};
@@ -1908,6 +1909,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../WorkflowKit/WorkflowKit/\"";
 			};
 			name = Release;
 		};
