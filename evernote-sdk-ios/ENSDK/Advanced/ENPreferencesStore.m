@@ -28,7 +28,7 @@
 
 #import "ENPreferencesStore.h"
 #import "ENSDKPrivate.h"
-#import <WorkflowKit/WorkflowKit.h>
+#import "WFWorkflowManager.h"
 
 static NSString * ENPreferencesStoreFilename = @"com.evernote.evernote-sdk-ios.plist";
 
