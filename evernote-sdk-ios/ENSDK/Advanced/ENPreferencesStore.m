@@ -28,6 +28,7 @@
 
 #import "ENPreferencesStore.h"
 #import "ENSDKPrivate.h"
+#import <WorkflowKit/WorkflowKit.h>
 
 static NSString * ENPreferencesStoreFilename = @"com.evernote.evernote-sdk-ios.plist";
 
@@ -39,8 +40,10 @@ static NSString * ENPreferencesStoreFilename = @"com.evernote.evernote-sdk-ios.p
 @implementation ENPreferencesStore
 + (NSString *)pathnameForStoreFilename:(NSString *)filename
 {
-    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    return [[paths[0] stringByAppendingPathComponent:@"Preferences"] stringByAppendingPathComponent:filename];
+    NSString *path = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:[WFWorkflowManager appGroupIdentifier]] path];
+    if (!path)
+        path = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"Preferences"];
+    return [path stringByAppendingPathComponent:filename];
 }
 
 - (id)initWithStoreFilename:(NSString *)filename
