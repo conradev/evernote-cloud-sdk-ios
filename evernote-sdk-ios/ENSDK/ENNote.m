@@ -210,6 +210,54 @@
     }];
 }
 
+- (void)generateHTMLData:(ENNoteGenerateWebArchiveDataCompletionHandler)completion
+{
+    if (!completion) {
+        ENSDKLogError(@"-generateHTMLData: requires a completion handler!");
+        return;
+    }
+    
+    // Turn the content of the note into sanitized HTML.
+    NSString * enml = [self enmlContent];
+    if (!enml) {
+        ENNoteContent * emptyContent = [ENNoteContent noteContentWithString:@""];
+        enml = [emptyContent enmlWithResources:self.resources];
+    }
+    
+    // Convert our ENResources to EDAM resources to send into the converter utility. We'll be asking for image resources
+    // to be referenced in the HTML (vs inlined), which means the URL in the archive web resource must match the URL in the
+    // <img src="..."> attribute. If the resource already has a source URL value, it is kept and used, but if not (ie the
+    // note was not captured from a web page), then just make one up. In this case we use a dummy hostname, and just use the
+    // resource's hash as a fake filename with an appropriate extension.
+    //
+    // This would be cleaner if we didn't require the totally fake hostname, but using any non-absolute path here confuses UIWebView.
+    //
+    NSMutableArray * edamResources = [NSMutableArray arrayWithCapacity:self.resources.count];
+    for (ENResource * resource in self.resources) {
+        EDAMResource * edamResource = [resource EDAMResource];
+        if (!edamResource.attributes.sourceURL) {
+            NSString * dataHash = [resource.dataHash enlowercaseHexDigits];
+            NSString * extension = [ENMIMEUtils fileExtensionForMIMEType:resource.mimeType];
+            NSString * fakeUrl = [NSString stringWithFormat:@"http://example.com/%@.%@", dataHash, extension];
+            edamResource.attributes.sourceURL = fakeUrl;
+        } else {
+            edamResource.attributes.sourceURL = [edamResource.attributes.sourceURL en_stringByUrlEncoding];
+        }
+        [edamResources addObject:edamResource];
+    }
+    
+    ENMLUtility * utility = [[ENMLUtility alloc] init];
+    [utility convertENMLToHTML:enml withInlinedResources:edamResources completionBlock:^(NSString * html, NSError * error) {
+        if (!html) {
+            ENSDKLogInfo(@"+webArchiveData failed to convert ENML to HTML: %@", error);
+            completion(nil);
+            return;
+        }
+        
+        completion([html dataUsingEncoding:NSUTF8StringEncoding]);
+    }];
+}
+
 + (void)populateNoteFromWebView:(UIWebView *)webView completion:(ENNotePopulateFromWebViewCompletionHandler)completion
 {
     if (!completion) {
