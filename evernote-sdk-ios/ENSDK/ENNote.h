@@ -101,6 +101,13 @@ typedef void (^ENNoteGenerateWebArchiveDataCompletionHandler)(NSData *_Nullable 
 - (void)generateWebArchiveData:(ENNoteGenerateWebArchiveDataCompletionHandler)completion;
 
 /**
+ *  This method generates HTML from the receiver's content.
+ *
+ *  @param completion A block to receive the HTML data.
+ */
+- (void)generateHTMLData:(ENNoteGenerateWebArchiveDataCompletionHandler)completion;
+
+/**
  *  Class method to create and populate a note object from a loaded UIWebView of your content. The styled contents 
  *  of the DOM as currently loaded are captured into the content of the note. Remote images (i.e. in <img> tags) 
  *  are captured as resources. (CSS-based images are not pulled in as resources, but will remain remote links in 
