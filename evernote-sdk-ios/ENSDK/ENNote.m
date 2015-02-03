@@ -222,7 +222,7 @@
     NSString * enml = [self enmlContent];
     if (!enml) {
         ENNoteContent * emptyContent = [ENNoteContent noteContentWithString:@""];
-        enml = [emptyContent enmlWithResources:self.resources];
+        enml = [emptyContent enmlWithNote:self];
     }
     
     // Convert our ENResources to EDAM resources to send into the converter utility. We'll be asking for image resources
