@@ -68,6 +68,16 @@ typedef void (^ENNoteGenerateWebArchiveDataCompletionHandler)(NSData * data);
 @property (nonatomic, assign) BOOL isReminder;
 
 /**
+ *  The modification date of the note.
+ */
+@property (nonatomic, readonly, strong) NSDate * modificationDate;
+
+/**
+ *  The modification date of the note.
+ */
+@property (nonatomic, readonly, strong) NSDate * creationDate;
+
+/**
  *  The array of resource objects current attached to this note.
  *
  *  @return An array of ENResources.
