@@ -116,6 +116,16 @@
     _tagNames = (tags.count > 0) ? tags : nil;
 }
 
+- (NSDate *)modificationDate
+{
+    return [NSDate dateWithEDAMTimestamp:[self.serviceNote.updated longValue]];
+}
+
+- (NSDate *)creationDate
+{
+    return [NSDate dateWithEDAMTimestamp:[self.serviceNote.created longValue]];
+}
+
 - (NSArray *)resources
 {
     return [_resources copy];
