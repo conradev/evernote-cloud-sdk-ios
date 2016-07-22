@@ -39,8 +39,11 @@ void FATInvalidAbstractInvocation(SEL selector, Class class) {
    ];
 }
 
-
 @implementation FATObject
+
++ (BOOL)supportsSecureCoding {
+  return YES;
+}
 
 + (NSString *) structName {
   FATInvalidAbstractInvocation(_cmd, self);
@@ -62,7 +65,25 @@ void FATInvalidAbstractInvocation(SEL selector, Class class) {
         continue;
       }
       
-      id fieldValue = [aDecoder decodeObjectForKey:fieldName];
+      uint32_t type = aField.type;
+      Class objectClass = nil;
+      if (type == TType_BOOL ||
+          type == TType_BYTE ||
+          type == TType_DOUBLE ||
+          type == TType_I16 ||
+          type == TType_I32 ||
+          type == TType_I64) {
+        objectClass = [NSNumber class];
+      } else if (type == TType_STRING) {
+        objectClass = [NSString class];
+      } else if (type == TType_STRUCT) {
+        objectClass = aField.valueClass;
+      } else {
+        NSLog(@"%@: Could not determine class to decode field %@", self, aField);
+        continue;
+      }
+
+      id fieldValue = [aDecoder decodeObjectOfClass:objectClass forKey:fieldName];
       [self setValue:fieldValue
               forKey:fieldName];
     }

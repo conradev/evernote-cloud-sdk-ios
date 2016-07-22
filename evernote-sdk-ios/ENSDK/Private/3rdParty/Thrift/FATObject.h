@@ -29,7 +29,7 @@
 #import <Foundation/Foundation.h>
 #import "FATField.h"
 
-@interface FATObject : NSObject <NSCoding, NSCopying>
+@interface FATObject : NSObject <NSSecureCoding, NSCopying>
 
 + (NSString *) structName;
 + (NSArray *) structFields;

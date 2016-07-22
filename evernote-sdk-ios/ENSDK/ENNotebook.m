@@ -37,6 +37,11 @@
 @end
 
 @implementation ENNotebook
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (id)initWithNotebook:(EDAMNotebook *)notebook 
 {
     return [self initWithNotebook:notebook linkedNotebook:nil sharedNotebook:nil];
@@ -73,9 +78,9 @@
 {
     self = [super init];
     if (self) {
-        self.notebook = [decoder decodeObjectForKey:@"notebook"];
-        self.linkedNotebook = [decoder decodeObjectForKey:@"linkedNotebook"];
-        self.sharedNotebook = [decoder decodeObjectForKey:@"sharedNotebook"];
+        self.notebook = [decoder decodeObjectOfClass:[EDAMNotebook class] forKey:@"notebook"];
+        self.linkedNotebook = [decoder decodeObjectOfClass:[EDAMLinkedNotebook class] forKey:@"linkedNotebook"];
+        self.sharedNotebook = [decoder decodeObjectOfClass:[EDAMSharedNotebook class] forKey:@"sharedNotebook"];
         self.isShared = [decoder decodeBoolForKey:@"isShared"];
         self.isDefaultNotebookOverride = [decoder decodeBoolForKey:@"isDefaultNotebookOverride"];
         if (!self.notebook && !self.linkedNotebook && !self.sharedNotebook) {

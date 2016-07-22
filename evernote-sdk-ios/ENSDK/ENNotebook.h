@@ -31,7 +31,7 @@
 /**
  *  This class represents a notebook in the Evernote service.
  */
-@interface ENNotebook : NSObject <NSCoding>
+@interface ENNotebook : NSObject <NSSecureCoding>
 
 /**
  *  The name of the notebook.
